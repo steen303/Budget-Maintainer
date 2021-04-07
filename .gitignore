@@ -128,7 +128,7 @@ dmypy.json
 # Pyre type checker
 .pyre/
 
-.back_end/.idea/
-.front_end/.idea/
-.back_end/.idea
-.front_end/.idea
+back_end/.idea/
+front_end/.idea/
+back_end/.idea
+front_end/.idea
