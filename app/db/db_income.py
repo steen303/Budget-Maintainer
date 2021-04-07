@@ -14,7 +14,7 @@ from domain.contact import Contact
 
 
 class DbIncome:
-    sql_get = "SELECT * FROM income WHERE id = %d"
+    sql_get = "SELECT * FROM income WHERE transaction_id = %d"
     sql_get_all = "SELECT * FROM income"
     sql_get_by_month = "SELECT * FROM income WHERE year = %s AND month = %s"
     sql_add = "INSERT INTO income (year, month, day, description, value, categorie, from_who) \

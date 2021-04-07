@@ -22,7 +22,7 @@ class Categorie:
             return False
 
     def get_json(self):
-        return {"id": self.id, "name": self.name}
+        return {"transaction_id": self.id, "name": self.name}
 
 
 class Categories:

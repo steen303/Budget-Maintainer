@@ -6,7 +6,7 @@ from domain.categorie import Categorie, Categories
 
 
 class DbCategorie:
-    sql_get_by_id = """SELECT * FROM categorie WHERE id = %s"""
+    sql_get_by_id = """SELECT * FROM categorie WHERE transaction_id = %s"""
     sql_get_by_name = "SELECT * FROM categorie WHERE name = %s"
     sql_get_all = "SELECT * FROM categorie"
     sql_add = "INSERT INTO categorie (name) VALUES (%s)"
