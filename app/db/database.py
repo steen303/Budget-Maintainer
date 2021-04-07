@@ -19,6 +19,10 @@ def create_connection(database="budget"):
 
 
 def close_connection(conn, c):
+    """
+
+    :rtype: object
+    """
     c.close()
     conn.close()
 
@@ -34,23 +38,28 @@ def does_col_contain_val(statement: object, col: object, value: object) -> objec
         print(e)
 
 
-def fetch(self, sql):  # TODO use this function in db Classes
+def fetch(sql):  # TODO use this function in db Classes
     try:
         conn, c = create_connection()
         c.execute(sql)
-        result = self.cur.fetchall()
+        result = c.fetchall()
         close_connection(conn, c)
         return result
     except Error as e:
         print(e)
 
 
-def execute(self, sql):  # TODO use this function in db Classes
-    self.cur.execute(sql)
-    self.__disconnect__()
+def execute(sql):  # TODO use this function in db Classes
     try:
         conn, c = create_connection()
         c.execute(sql)
         close_connection(conn, c)
     except Error as e:
         print(e)
+
+
+def get_boolean(txt_boolean):
+    if txt_boolean == 0 or txt_boolean == "0":
+        return False
+    else:
+        return True

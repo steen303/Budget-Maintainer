@@ -50,18 +50,18 @@ class DbCategorie:
         finally:
             close_connection(conn, c)
 
-    def replace(self, id, name):
+    def replace(self, category_id, name):
         try:
             conn, c = create_connection()
-            c.execute(self.sql_replace, (id, name))
+            c.execute(self.sql_replace, (category_id, name))
             conn.commit()
         except Error as error:
             logging.error(error)
         finally:
             close_connection(conn, c)
 
-    def delete(self, id):
+    def delete(self, category_id):
         conn, c = create_connection()
-        c.execute(self.sql_delete, (id,))
+        c.execute(self.sql_delete, (category_id,))
         rows = c.fetchall()
         close_connection(conn, c)

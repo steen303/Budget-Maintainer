@@ -3,7 +3,7 @@
 
 class Transaction:
 
-    def __init__(self, transaction_id, year, month: object, day, description, value, categorie, from_who, is_expense=False):
+    def __init__(self, transaction_id, year, month, day, description, value, categorie, from_who, is_expense=False):
         """
 
         :type day: int
@@ -19,7 +19,7 @@ class Transaction:
         self.is_expense = bool(is_expense)
 
     def get_json(self):
-        return {"name": str(self.transaction_id),
+        return {"name": str(self.id),
                 "year": str(self.year),
                 "month": str(self.month),
                 "day": str(self.day),
@@ -31,7 +31,7 @@ class Transaction:
                 }
 
 
-class TansactionList:
+class TransactionList:
     def __init__(self, transaction_list=None):
         if transaction_list is None:
             transaction_list = []
@@ -43,17 +43,14 @@ class TansactionList:
     def add_transaction(self, income):
         self.transaction_list.append(income)
 
-    def sum(self):
-        sum = 0
+    def sum_all_values(self):
+        sum_all_val = 0
         for transaction in self.transaction_list:
-            sum += transaction.value
-        return sum
+            sum_all_val += transaction.value
+        return sum_all_val
 
     def average(self):
-        sum = 0
-        for transaction in self.transaction_list:
-            sum += transaction.value
-        return sum / len(self.transaction_list)
+        return self.sum_all_values() / len(self.transaction_list)
 
     def min(self):
         min_value = self.transaction_list[0].value

@@ -3,7 +3,7 @@
 
 {% block title %}Index{% endblock %}
 
-{% block content %}
+{% block content_index %}
     <h1>Hi, {{ user.username }}!</h1>
     {% for post in posts %}
     <div><p>{{ post.author.username }} says: <b>{{ post.body }}</b></p></div>
