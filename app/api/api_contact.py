@@ -4,13 +4,13 @@ from db.db_contact import DbContact
 api_contact = Blueprint('api_contact', __name__)
 
 
-@api_contact.route("/api/contacts/all/", methods=['GET'])
+@api_contact.route("all/", methods=['GET'])
 def api_contacts_get_all():
     db_con = DbContact()
     return jsonify(db_con.get_all().get_contacts_json())
 
 
-@api_contact.route('/api/contacts/', methods=['POST'])
+@api_contact.route('contacts/', methods=['POST'])
 def api_contacts_create():
     db_con = DbContact()
     data = request.get_json(force=True) or {}
