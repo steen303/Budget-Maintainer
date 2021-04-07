@@ -5,7 +5,10 @@ from api.api_categorie import api_categorie
 from api.api_contact import api_contact
 from api.api_income import api_income
 
-app = Flask(__name__)
+app = Flask(__name__,
+            static_url_path='',
+            static_folder='static',
+            template_folder='templates')
 CORS(app)
 app.register_blueprint(api_categorie)
 app.register_blueprint(api_contact)
