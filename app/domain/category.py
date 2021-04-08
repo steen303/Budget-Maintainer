@@ -1,7 +1,4 @@
-from flask import jsonify
-
-
-class Categorie:
+class Category:
     def __init__(self, id, name):
         self.id = id
         self.name = name
@@ -10,7 +7,7 @@ class Categorie:
         return "ID:" + self.id + ", " + self.name
 
     def __repr__(self) -> str:
-        return "Categorie(%s, %s)" % (self.id, self.name)
+        return "Category(%s, %s)" % (self.id, self.name)
 
     def __hash__(self) -> int:
         return hash(self.__repr__())
@@ -22,7 +19,7 @@ class Categorie:
             return False
 
     def get_json(self):
-        return {"transaction_id": self.id, "name": self.name}
+        return {"id": self.id, "name": self.name}
 
 
 class Categories:
@@ -39,8 +36,6 @@ class Categories:
 
     def get_categories_json(self):
         json_output = []
-        # for x in range(len(self.categories)):
-        #     json_output[x] = self.categories[x].get_json()
         for categorie in self.categories:
             json_output.append(categorie.get_json())
         return json_output

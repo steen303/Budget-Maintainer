@@ -1,13 +1,6 @@
-# TODO implement this class to avoid duplicate code in income.py and expense.py
-
-
 class Transaction:
 
     def __init__(self, transaction_id, year, month, day, description, value, categorie, from_who, is_expense=False):
-        """
-
-        :type day: int
-        """
         self.id = transaction_id
         self.year = int(year)
         self.month = int(month)
@@ -25,9 +18,9 @@ class Transaction:
                 "day": str(self.day),
                 "description": self.description,
                 "value": str(self.value),
-                "categorie": self.categorie.get_json(),
+                "category": self.categorie.get_json(),
                 "contact": self.contact.name,
-                "is_expense": self.is_expense
+                "is_expense": str(self.is_expense)
                 }
 
 

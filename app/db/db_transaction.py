@@ -2,16 +2,16 @@ import logging
 from mysql.connector import Error
 
 from db.database import create_connection, close_connection, get_boolean
-from db.db_categorie import DbCategorie
+from db.db_categorie import DbCategory
 from domain.transaction import Transaction, TransactionList
 from db.db_contact import DbContact
 from domain.contact import Contact
 
 
 def create_categorie(categorie_name):
-    db_cat = DbCategorie()
+    db_cat = DbCategory()
     if db_cat.get_by_name(categorie_name) is None:
-        db_cat.add_categorie(categorie_name)
+        db_cat.add_category(categorie_name)
     return db_cat.get_by_name(categorie_name)
 
 
@@ -19,9 +19,9 @@ class DbTransaction:
     sql_get = "SELECT * FROM transactions WHERE transaction_id = %d"
     sql_get_all_income = "SELECT * FROM transactions WHERE is_expense = 0"
     sql_get_all_expense = "SELECT * FROM transactions WHERE is_expense = 1"
-    sql_get_by_month = "SELECT * FROM transactions WHERE year = %s AND month = %s WHERE is_expense = %s"
-    sql_add = "INSERT INTO transactions (year, month, day, description, value, categorie, from_who) \
-                VALUES (%s, %s, %s, %s, %s, %s, %s)"
+    sql_get_by_month = "SELECT * FROM transactions WHERE year = %s AND month = %s AND is_expense = %s ORDER BY day ASC"
+    sql_add = "INSERT INTO transactions (year, month, day, description, value, categorie, contact, is_expense) \
+                VALUES (%s, %s, %s, %s, %s, %s, %s, %s)"
     sql_replace = "REPLACE INTO transactions (transaction_id, year, month, day, description, value, categorie, \
                                      contact, is_expense) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s)"
     sql_delete = "DELETE FROM transactions WHERE transaction_id = %s"
@@ -31,7 +31,7 @@ class DbTransaction:
         transaction_list = TransactionList()
         for row in rows:
             contact = Contact(row[7])
-            db_cat = DbCategorie()
+            db_cat = DbCategory()
             categorie = db_cat.get_by_id(row[6])
             transaction = Transaction(row[0], row[1], row[2],
                                       row[3], row[4], row[5], categorie, contact, get_boolean(row[8]))
@@ -44,7 +44,7 @@ class DbTransaction:
         rows = c.fetchall()
         close_connection(conn, c)
         contact = Contact(rows[0][7])
-        db_cat = DbCategorie()
+        db_cat = DbCategory()
         categorie = db_cat.get_by_id(rows[0][6])
 
         return Transaction(rows[0][0], rows[0][1], rows[0][2], rows[0][3], rows[0][4], rows[0][5], categorie, contact,
@@ -79,6 +79,7 @@ class DbTransaction:
         return self.sql_rows_to_transactions(rows)
 
     def add_transaction(self, year, month, day, description, value, categorie_name, contact, is_expense):
+        print("Add transaction")
         try:
             conn, c = create_connection()
             categorie = create_categorie(categorie_name)
@@ -92,6 +93,7 @@ class DbTransaction:
             logging.error("Can't add transaction: " + str(error))
 
     def add_income(self, year, month, day, description, value, categorie_name, from_who):
+        print("add_income")
         self.add_transaction(year, month, day, description, value, categorie_name, from_who, "0")
 
     def add_expense(self, year, month, day, description, value, categorie_name, to_who):

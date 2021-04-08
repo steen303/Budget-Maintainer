@@ -2,23 +2,23 @@ import logging
 from mysql.connector import Error
 
 from db.database import create_connection, close_connection
-from domain.categorie import Categorie, Categories
+from domain.category import Category, Categories
 
 
-class DbCategorie:
-    sql_get_by_id = """SELECT * FROM categorie WHERE transaction_id = %s"""
-    sql_get_by_name = "SELECT * FROM categorie WHERE name = %s"
-    sql_get_all = "SELECT * FROM categorie"
-    sql_add = "INSERT INTO categorie (name) VALUES (%s)"
-    sql_replace = "REPLACE INTO categorie (name, name) VALUES (%s, %s)"
-    sql_delete = "DELETE FROM categorie WHERE name = %d"
+class DbCategory:
+    sql_get_by_id = """SELECT * FROM category WHERE id = %s"""
+    sql_get_by_name = "SELECT * FROM category WHERE name = %s"
+    sql_get_all = "SELECT * FROM category ORDER BY name"
+    sql_add = "INSERT INTO category (name) VALUES (%s)"
+    sql_replace = "REPLACE INTO category (id, name) VALUES (%s, %s)"
+    sql_delete = "DELETE FROM category WHERE name = %d"
 
     def get_by_id(self, categorie_id):
         conn, c = create_connection()
         c.execute(self.sql_get_by_id, (categorie_id,))
         rows = c.fetchall()
         close_connection(conn, c)
-        return Categorie(rows[0][0], rows[0][1])
+        return Category(rows[0][0], rows[0][1])
 
     def get_by_name(self, name):
         conn, c = create_connection()
@@ -26,7 +26,7 @@ class DbCategorie:
         rows = c.fetchall()
         close_connection(conn, c)
         if len(rows) > 0:
-            return Categorie(rows[0][0], rows[0][1])
+            return Category(rows[0][0], rows[0][1])
         else:
             return None
 
@@ -37,10 +37,10 @@ class DbCategorie:
         rows = c.fetchall()
         close_connection(conn, c)
         for row in rows:
-            cat.add_categorie(Categorie(row[0], row[1]))
+            cat.add_categorie(Category(row[0], row[1]))
         return cat
 
-    def add_categorie(self, name):
+    def add_category(self, name):
         try:
             conn, c = create_connection()
             c.execute(self.sql_add, (name,))

@@ -2,6 +2,10 @@
 const apiUrl = "http://localhost:5000/api/";
 let year = 2020;
 let month = 3;
+const month_name = ["All", "January","February","March","April","May","June","July",
+    "August","September","October","November","December"];
+const years = [2020]
+
 
 
 // navigation and page loading functions
@@ -23,83 +27,120 @@ function changeMonth(y, m) {
 }
 
 
+
 // content loading
+// load navigation
+function loadAvailableYears() {
+    // TODO load all the years in the navigation menu
+}
+
+function loadMonthNames() {
+    // TODO load all the names of the month in the navigation menu
+}
+
+// load pages
+
+function loadMonth() {
+    // load income
+    loadIncomeMonth();
+    loadTransactionForm('#m-income-cat', 'm-income-from')
+    // load expense
+    loadExpenseMonth();
+    loadTransactionForm('#m-expense-cat', 'm-expense-to')
+}
+
+// load page elements
 
 function loadIncomeMonth() {
     fetch(apiUrl + 'income/' + year + "/" + month + "/", {
-        headers: {contentType: "application/json"},  // TODO implement it first in the backend
+        headers: {contentType: 'application/json'},
     })
         .then(response => response.json())
         .then(data => fill_income_month_table(data))
         .catch((error) => console.error('Error:', error));
 }
 
-function loadMonth() {
-    loadIncomeMonth();
-    loadIncomeForm();
+function loadExpenseMonth() {
+    fetch(apiUrl + 'expense/' + year + "/" + month + "/", {
+        headers: {contentType: 'application/json'},
+    })
+        .then(response => response.json())
+        .then(data => fill_expense_month_table(data))
+        .catch((error) => console.error('Error:', error));
+}
+
+
+// load tables
+
+function load_transaction_table(data, selector) {
+    console.log(data)
+    document.querySelector(selector).innerHTML = ""
+    data.forEach(function (transactions) {
+        document.querySelector(selector).innerHTML += '<tr><td>' + transactions.day + '</td>'
+            + '<td>' + transactions.contact + '</td><td>' + transactions.description + '</td><td>' + transactions.value + '</td><td>'
+            + transactions.category.name + '</td></tr>';
+    })
 }
 
 function fill_income_month_table(data) {
-    document.querySelector('#table-month-income tbody').innerHTML = ""
-    data.forEach(function (income) {
-        document.querySelector('#table-month-income tbody').innerHTML += '<tr><td>' + income.day + '</td>'
-            + '<td>' + income.contact + '</td><td>' + income.description + '</td><td>' + income.value + '</td><td>'
-            + income.categorie.name + '</td></tr>';
-    })
+    load_transaction_table(data, '#table-month-income tbody')
+    // TODO test, if test ok remove code
+    // document.querySelector('#table-month-income tbody').innerHTML = ""
+    // data.forEach(function (transactions) {
+    //     document.querySelector('#table-month-income tbody').innerHTML += '<tr><td>' + transactions.day + '</td>'
+    //         + '<td>' + transactions.contact + '</td><td>' + transactions.description + '</td><td>' + transactions.value + '</td><td>'
+    //         + transactions.category.name + '</td></tr>';
+    // })
 }
 
-function loadIncomeForm() {
-    fetch(apiUrl + 'categories/all/', {
-        headers: {contentType: "application/json"}
+function fill_expense_month_table(data) {
+    console.log("ready to fill transaction table")
+    load_transaction_table(data, '#table-month-expense tbody')
+    // TODO test, if test ok remove code
+    // document.querySelector('#table-month-expense tbody').innerHTML = ""
+    // data.forEach(function (transaction) {
+    //     document.querySelector('#table-month-expense tbody').innerHTML += '<tr><td>' + transaction.day + '</td>'
+    //         + '<td>' + transaction.contact + '</td><td>' + transaction.description + '</td><td>' + transaction.value + '</td><td>'
+    //         + transaction.category.name + '</td></tr>';
+    // })
+}
+
+
+// load forms
+
+function loadTransactionForm(category_selector, contact_selector) {
+    // fetch categories
+    fetch(apiUrl + 'category/all/', {
+        headers: {contentType: 'application/json'}
     })
         .then((response) => response.json())
         .then(data => {
-            document.querySelector('#m-income-cat').innerHTML = ""
-            data.forEach(function (categorie) {
-                document.querySelector('#m-income-cat').innerHTML += "<option>" + categorie.name + "</option>"
+            document.querySelector(category_selector).innerHTML = ""
+            data.forEach(function (category) {
+                document.querySelector(category_selector).innerHTML += "<option>" + category.name + "</option>"
             })
         })
         .catch((error) => console.error('Error:', error));
 
-    fetch(apiUrl + 'contacts/all/', {
-        headers: {contentType: "application/json"}
+    // fetch contacts
+    fetch(apiUrl + 'contact/all/', {
+        headers: {contentType: 'application/json'}
     })
         .then((response) => response.json())
-        .then(data => {
-            console.log(data)
-            autocomplete(document.getElementById("m-income-from"), data);
-        })
+        .then(data => { autocomplete(document.getElementById(contact_selector), data); })
         .catch((error) => console.error('Error:', error));
 }
 
 
-// API requests
 
-// function submit_add_categorie(event) {
-//     event.preventDefault()
-//     let formData = new FormData();
-//     formData.append('name', document.querySelector('#form-add-categorie #name').value);
-//     fetch(apiUrl + '/categories', {
-//         method: 'POST', // or 'PUT'
-//         mode: 'no-cors',
-//         body: formData,
-//     })
-//         .then(response => response.json())
-//         .then(data => {
-//             console.log('Success:', data);
-//         })
-//         .catch((error) => {
-//             console.error('Error:', error);
-//         });
-//     submit_add_categorie2()
-// }
+// Submit Forms
 
-function submit_add_categorie(event) {
+function submit_add_category(event) {
     event.preventDefault()
-    fetch(apiUrl + 'categories/', {
+    fetch(apiUrl + 'category/', {
         headers: {contentType: "application/json"},
         method: 'POST',
-        body: JSON.stringify({name: document.querySelector('#form-add-m-income #name').value})
+        body: JSON.stringify({name: document.querySelector('#form-add-category #name').value})
     })
         .then(response => response.json())
         .then(data => {
@@ -112,13 +153,13 @@ function submit_add_categorie(event) {
 
 function submit_add_m_income(event) {
     event.preventDefault()
-    fetch(apiUrl + 'income/' + year + "/" + month + "/", {
+    fetch(apiUrl + 'income/' + year + '/' + month + '/', {
         headers: {contentType: "application/json"},
         method: 'POST',
         body: JSON.stringify({
             day: document.querySelector('#m-income-day').value,
             category: document.querySelector('#m-income-cat').value,
-            fromWho: document.querySelector('#m-income-from').value,
+            contact: document.querySelector('#m-income-from').value,
             description: document.querySelector('#m-income-desc').value,
             value: document.querySelector('#m-income-val').value,
         })
@@ -130,17 +171,41 @@ function submit_add_m_income(event) {
         .catch((error) => console.error('Error:', error));
 }
 
+function submit_add_m_expense(event) {
+    event.preventDefault()
+    fetch(apiUrl + 'expense/' + year + "/" + month + "/", {
+        headers: {contentType: 'application/json'},
+        method: 'POST',
+        body: JSON.stringify({
+            day: document.querySelector('#m-expense-day').value,
+            category: document.querySelector('#m-expense-cat').value,
+            contact: document.querySelector('#m-expense-to').value,
+            description: document.querySelector('#m-expense-desc').value,
+            value: document.querySelector('#m-expense-val').value,
+        })
+    })
+        .then(response => response.json())
+        .then(data => {
+            fill_expense_month_table(data);
+        })
+        .catch((error) => console.error('Error:', error));
+}
+
 // onload event listeners
+
 window.onload = function () {
-    // forms
-    document.querySelector('#form-add-categorie button[type="submit"]')
-        .addEventListener("click", submit_add_categorie, false);
+    // forms submit buttons
+    document.querySelector('#form-add-category button[type="submit"]')
+        .addEventListener("click", submit_add_category, false);
     document.querySelector('#form-add-m-income button[type="submit"]')
         .addEventListener("click", submit_add_m_income, false);
+    document.querySelector('#form-add-m-expense button[type="submit"]')
+        .addEventListener("click", submit_add_m_expense, false);
 };
 
 
 // autocomplete code
+
 function autocomplete(inp, arr) {
     /*the autocomplete function takes two arguments,
     the text field element and an array of possible autocompleted values:*/

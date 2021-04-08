@@ -25,10 +25,11 @@
                 2020
             </a>
             <div class="dropdown-menu">
-                <a class="dropdown-item" href="#">Januari</a>
-                <a class="dropdown-item" href="#">Februari</a>
+                <a class="dropdown-item" href="#" onclick="changeMonth(2020, 1)">Januari</a>
+                <a class="dropdown-item" href="#" onclick="changeMonth(2020, 2)">Februari</a>
                 <a class="dropdown-item" href="#" onclick="changeMonth(2020, 3)">Maart</a>
-                <a class="dropdown-item" href="#">April</a>
+                <a class="dropdown-item" href="#" onclick="changeMonth(2020, 4)">April</a>
+                <a class="dropdown-item" href="#" onclick="changeMonth(2020, 4)">Mei</a>
             </div>
         </li>
         <li class="nav-item">
@@ -47,7 +48,6 @@
     <div class="hidden" id="page_month">
         <h1>Month - Year</h1>
         <h2>Income</h2>
-        <!--        TODO: Add table with income data-->
         <table id="table-month-income" class="TF table-dark table-striped table-hover">
             <thead>
             <tr>
@@ -107,14 +107,72 @@
                 <button type="submit" class="btn btn-primary">Submit</button>
             </form>
         </div>
-
+        <h2>Expense</h2>
+        <table id="table-month-expense" class="TF table-dark table-striped table-hover">
+            <thead>
+            <tr>
+                <th>Day</th>
+                <th style="min-width: 75px">To</th>
+                <th style="min-width: 150px">Description</th>
+                <th style="min-width: 50px">Value</th>
+                <th>Categorie</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+            </tr>
+            </tbody>
+            <tfoot>
+            <tr>
+                <td>Sum of Displayed rows</td>
+                <td id="table-month-expense-sum1"></td>
+                <td id="table-month-expense-sum2"></td>
+                <td id="table-month-expense-sum3"></td>
+                <td id="table-month-expense-sum4"></td>
+            </tr>
+            </tfoot>
+        </table>
+        <button type="button" class="btn btn-primary" data-toggle="collapse" data-target="#div-add-m-expense">Add
+            Expense...
+        </button>
+        <div id="div-add-m-expense" class="collapse">
+            <form class="" id="form-add-m-expense" action="#" autocomplete="off">
+                <div class="form-group">
+                    <label for="m-expense-day">Day:</label>
+                    <input type="text" class="form-control" placeholder="Day" id="m-expense-day"/>
+                </div>
+                <div class="form-group">
+                    <label for="m-expense-cat">Category::</label>
+                    <select class="form-control" id="m-expense-cat">
+                    </select>
+                </div>
+                <div class="autocomplete form-group">
+                    <label for="m-expense-to">To:</label>
+                    <input id="m-expense-to" type="text" placeholder="From" class="form-control"/>
+                </div>
+                <div class="form-group">
+                    <label for="m-expense-desc">Description:</label>
+                    <input type="text" class="form-control" placeholder="Description" id="m-expense-desc"/>
+                </div>
+                <div class="form-group">
+                    <label for="m-expense-val">Value:</label>
+                    <input type="text" class="form-control" placeholder="Value" id="m-expense-val"/>
+                </div>
+                <button type="submit" class="btn btn-primary">Submit</button>
+            </form>
+        </div>
     </div>
 
 
     <div class="hidden" id="page_categorie">
         <h1>Categories</h1>
         <h2>Add</h2>
-        <form class="form-inline" id="form-add-categorie" action="#">
+        <form class="form-inline" id="form-add-category" action="#">
             <label for="name">Name:</label>
             <input type="text" class="form-control" placeholder="Enter name" id="name"/>
             <button type="submit" class="btn btn-primary">Add</button>
